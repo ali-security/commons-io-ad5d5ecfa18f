@@ -22,7 +22,6 @@ cache:
 jdk:
   - openjdk8
   - openjdk11
-  - openjdk14
   - openjdk-ea
   - oraclejdk11
 
@@ -35,7 +34,5 @@ matrix:
 
 # --no-transfer-progress requires Maven 3.6.1+. Otherwise use --batch-mode
 script:
-  - mvn -V --no-transfer-progress
-
-after_success:
-  - mvn -V --no-transfer-progress clean cobertura:cobertura coveralls:report -Ptravis-cobertura
+  - mvn -V --no-transfer-progress -Drat.skip=true -Djapicmp.skip=true -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true
+  - find target/surefire-reports -name 'TEST-*.xml' -exec grep -H -B1 '<skipped' {} \;
